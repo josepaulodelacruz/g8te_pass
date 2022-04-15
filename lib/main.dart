@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:g8te_pass/flavor_config.dart';
+import 'package:g8te_pass/router.dart' as OnRouter;
 
 //Main function
 void setupApp() {
@@ -18,14 +19,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(FlavorConfig.instance.values.appName),
-        ),
-        body: const Center(
-          child: Text("Hello world"),
-        ),
-      )
+      title: FlavorConfig.instance.values.appName,
+      initialRoute: '/',
+      onGenerateRoute: OnRouter.Router.generateRoute,
     );
   }
 }
