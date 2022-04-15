@@ -1,4 +1,4 @@
-package ph.jpdc.com.g8te_pass
+package ph.jpdc.com
 
 import io.flutter.embedding.android.FlutterActivity
 
