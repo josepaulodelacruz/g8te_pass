@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:g8te_pass/common/string_routes.dart';
 import 'package:g8te_pass/flavor_config.dart';
-import 'package:g8te_pass/router.dart' as OnRouter;
+import 'package:g8te_pass/router.dart' as on_router;
 
-//Main function
+//Main initializer
 void setupApp() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -20,8 +21,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: FlavorConfig.instance.values.appName,
-      initialRoute: '/',
-      onGenerateRoute: OnRouter.Router.generateRoute,
+      initialRoute: splashScreen,
+      onGenerateRoute: on_router.Router.generateRoute,
     );
   }
 }
