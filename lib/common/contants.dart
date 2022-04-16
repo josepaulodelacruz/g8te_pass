@@ -9,6 +9,11 @@ const COLOR_DARK_BLUE = Color(0xff442FB2);
 const COLOR_DARK = Color(0xff0d1d50);
 const COLOR_LIGHT_BLUE = Color(0xff4ED3F5);
 
+///fonts
+const FONT = "Comic";
+const FONT_BOLD = "Comic-Bold";
+
+
 const String dev_endpoint = "http://10.0.2.2:8000";
 
 ThemeData createTheme(BuildContext context) {
@@ -19,7 +24,24 @@ ThemeData createTheme(BuildContext context) {
 
     textTheme: const TextTheme(
       headline1: TextStyle(
-        fontFamily: "Comic-bold",
+        fontFamily: FONT_BOLD,
+        color: COLOR_DARK,
+        fontWeight: FontWeight.w700,
+      ),
+      headline2: TextStyle(
+        fontFamily: FONT_BOLD,
+        color: COLOR_DARK,
+        fontWeight: FontWeight.w700,
+        fontSize: 42,
+      ),
+      subtitle1: TextStyle(
+        fontFamily: FONT,
+        color: COLOR_DARK,
+        fontWeight: FontWeight.w700,
+        fontSize: 18,
+      ),
+      button: TextStyle(
+        fontFamily: FONT,
         color: COLOR_DARK,
         fontWeight: FontWeight.w700,
       ),
