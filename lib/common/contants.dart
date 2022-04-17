@@ -20,8 +20,6 @@ ThemeData createTheme(BuildContext context) {
   return ThemeData(
     // appBarTheme: appBarTheme,
     scaffoldBackgroundColor: COLOR_GRAY,
-    primarySwatch: Colors.deepPurple,
-
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontFamily: FONT_BOLD,

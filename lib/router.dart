@@ -12,6 +12,8 @@ class Router {
         return CupertinoPageRoute(builder: (_) => const LaunchScreen());
       case launchLogRegScreen:
         return MaterialPageRoute(builder: (_) => const LaunchLogRegScreen());
+      case registerScreen:
+        return CupertinoPageRoute(builder: (_) => const RegistraterScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
