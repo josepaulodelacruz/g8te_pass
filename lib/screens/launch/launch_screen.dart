@@ -69,12 +69,16 @@ class LaunchScreen extends StatelessWidget {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: OutlineButtonWidgetIcon(
-                    icon: const Icon(Icons.arrow_forward_outlined, color: COLOR_WHITE),
-                    text: "Get Started",
-                    onPressed: () {
-                      Navigator.pushNamed(context, launchLogRegScreen);
-                    },
+                  child: Row(
+                    children: [
+                      OutlineButtonWidgetIcon(
+                        icon: const Icon(Icons.arrow_forward_outlined, color: COLOR_WHITE),
+                        text: "Get Started",
+                        onPressed: () {
+                          Navigator.pushNamed(context, launchLogRegScreen);
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 const Spacer(),

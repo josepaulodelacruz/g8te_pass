@@ -32,6 +32,11 @@ ThemeData createTheme(BuildContext context) {
         fontWeight: FontWeight.w700,
         fontSize: 42,
       ),
+      headline3: TextStyle(
+        fontFamily: FONT_BOLD,
+        color: COLOR_DARK,
+        fontWeight: FontWeight.w700,
+      ),
       subtitle1: TextStyle(
         fontFamily: FONT,
         color: COLOR_DARK,
@@ -40,11 +45,16 @@ ThemeData createTheme(BuildContext context) {
       ),
       button: TextStyle(
         fontFamily: FONT,
-        color: COLOR_DARK,
+        color: COLOR_WHITE,
         fontWeight: FontWeight.w700,
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: COLOR_LIGHT_BLUE,
+        ),
+      ),
     ),
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.white,

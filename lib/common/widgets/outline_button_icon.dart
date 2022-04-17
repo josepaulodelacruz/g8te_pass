@@ -21,13 +21,14 @@ class OutlineButtonWidgetIcon extends StatelessWidget {
       minWidth: 20,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          fixedSize: Size(SizeConfig.blockSizeVertical! * 25, 50),
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeVertical! * 5),
           side: const BorderSide(
-            color: COLOR_WHITE, width: 1.5,
+            color: COLOR_WHITE,
+            width: 1.5,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              SizeConfig.blockSizeHorizontal! * 10,
+              SizeConfig.blockSizeHorizontal! * 2,
             ),
           ),
         ),
