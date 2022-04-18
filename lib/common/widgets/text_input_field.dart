@@ -9,6 +9,7 @@ class TextInputField extends StatelessWidget {
   final String hintText;
   final bool readOnly;
   final String initialValue;
+  final TextInputType keyboardType;
 
   const TextInputField({
     Key? key,
@@ -19,6 +20,7 @@ class TextInputField extends StatelessWidget {
     this.hintText = "",
     this.readOnly = false,
     this.initialValue = "",
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class TextInputField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          keyboardType: TextInputType.text,
           initialValue: initialValue,
           style: const TextStyle(
             fontFamily: FONT,

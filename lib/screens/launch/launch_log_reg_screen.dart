@@ -52,7 +52,7 @@ class LaunchLogRegScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Center(
                   child: FlutterLogo(
-                    size: SizeConfig.blockSizeHorizontal! * 60,
+                    size: SizeConfig.blockSizeVertical! * 30,
                   ),
                 ),
                 Padding(
@@ -82,7 +82,9 @@ class LaunchLogRegScreen extends StatelessWidget {
                       icon: const Icon(Icons.login,
                           color: COLOR_WHITE),
                       text: "LOGIN",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, loginScreen);
+                      },
                     ),
                     OutlineButtonWidgetIcon(
                       icon: const Icon(Icons.person_add,

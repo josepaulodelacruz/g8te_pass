@@ -3,7 +3,7 @@ import 'package:g8te_pass/common/size_config.dart';
 import 'package:g8te_pass/common/widgets/gradient_background.dart';
 import 'package:g8te_pass/common/widgets/transparent_appbar.dart';
 import 'package:g8te_pass/common/contants.dart';
-import 'package:g8te_pass/screens/register/widgets/text_input_field.dart';
+import 'package:g8te_pass/common/widgets/text_input_field.dart';
 
 class RegistraterScreen extends StatefulWidget {
   const RegistraterScreen({Key? key}) : super(key: key);
