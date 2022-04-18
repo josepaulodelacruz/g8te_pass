@@ -9,6 +9,10 @@ const COLOR_DARK_BLUE = Color(0xff442FB2);
 const COLOR_DARK = Color(0xff0d1d50);
 const COLOR_LIGHT_BLUE = Color(0xff4ED3F5);
 
+
+const COLOR_DARKEST_BLUE = Color(0xff111E6C);
+const COLOR_DARKER_BLUE = Color(0xff111D6C);
+const COLOR_LIGHTER_BLUE = Color(0xff00BBE7);
 ///fonts
 const FONT = "Comic";
 const FONT_BOLD = "Comic-Bold";

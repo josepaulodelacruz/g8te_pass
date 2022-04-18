@@ -7,6 +7,8 @@ class TextInputField extends StatelessWidget {
   final Color labelColor;
   final TextEditingController? controller;
   final String hintText;
+  final bool readOnly;
+  final String initialValue;
 
   const TextInputField({
     Key? key,
@@ -15,12 +17,14 @@ class TextInputField extends StatelessWidget {
     this.labelColor = COLOR_DARK,
     this.controller,
     this.hintText = "",
+    this.readOnly = false,
+    this.initialValue = "",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           note,
@@ -30,11 +34,12 @@ class TextInputField extends StatelessWidget {
           ),
         ),
         TextFormField(
-          controller: controller,
+          initialValue: initialValue,
           style: const TextStyle(
             fontFamily: FONT,
             color: COLOR_DARK,
           ),
+          readOnly: readOnly,
           decoration: InputDecoration(
             labelText: label,
             labelStyle: Theme.of(context).textTheme.bodyText1!,

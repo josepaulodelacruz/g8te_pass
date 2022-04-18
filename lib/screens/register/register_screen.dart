@@ -73,12 +73,71 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     style: Theme.of(context).textTheme.headline3!.copyWith(
                       fontSize: SizeConfig.blockSizeVertical! * 3
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: const [
+                      Flexible(
+                        flex: 1,
+                        child: TextInputField(
+                          label: "Block",
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Flexible(
+                        flex: 1,
+                        child: TextInputField(
+                          label: "Lot",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: const [
+                      Flexible(
+                        flex: 1,
+                        child: TextInputField(
+                          label: "Street Address (optional)",
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Flexible(
+                        flex: 1,
+                        child: TextInputField(
+                          label: "Phase",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: TextInputField(
+                    readOnly: true,
+                    initialValue: "Brgy. Butong, Cabuyao City Laguna",
+                    note: "Place of residence",
+                    label: "",
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: COLOR_DARKER_BLUE,
+                    ),
+                    onPressed: () {},
+                    child: const Text(
+                      "Confirm",
+                    ),
                   )
                 ),
-               ElevatedButton(
-                   onPressed: () {},
-                   child: Text("CONFIRM", style: Theme.of(context).textTheme.button),
-               )
               ],
             ),
           ),
