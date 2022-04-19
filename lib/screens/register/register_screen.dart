@@ -1,9 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/size_config.dart';
+import 'package:g8te_pass/common/utils.dart';
+import 'package:g8te_pass/common/widgets/dropdown_widget.dart';
 import 'package:g8te_pass/common/widgets/gradient_background.dart';
 import 'package:g8te_pass/common/widgets/transparent_appbar.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/widgets/text_input_field.dart';
+import 'package:g8te_pass/models/firebase_option.dart';
 
 class RegistraterScreen extends StatefulWidget {
   const RegistraterScreen({Key? key}) : super(key: key);
@@ -14,6 +18,33 @@ class RegistraterScreen extends StatefulWidget {
 
 class _RegistraterScreenState extends State<RegistraterScreen> {
   final GlobalKey _formKey = GlobalKey<FormState>();
+  List<String> items = [];
+  List<FirebaseOptionsModel> options = [
+    const FirebaseOptionsModel(
+      associationName: "G8te Pass",
+      appId: "1:247894978562:android:17077c2bdd17af82dcb71b",
+      apiKey: "AIzaSyCuKwuPXneN8LrWytYDj7Z0IKU7ww0G0_Y",
+      projectId: "g8te-pass",
+      messagingSenderId: "247894978562",
+    ),
+    const FirebaseOptionsModel(
+      associationName: "Saint Joseph Village 6",
+      appId: "1:188291409218:android:e7c5cf39f7ab1d9c0f94db",
+      apiKey: "AIzaSyAjTP7RBzX8Lri7xatRWzJmxJGytjnfEuU",
+      projectId: "saint-joseph-6-association",
+      messagingSenderId: "188291409218",
+    ),
+  ];
+
+  @override
+  void initState () {
+    items = options.map((option) {
+      return option.associationName;
+    }).toList();
+    print(items);
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +79,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                           ),
                         )
                       ],
-                    )
+                    ),
                   ),
                 ),
                 const Padding(
@@ -59,20 +90,38 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     hintText: "Homeowner",
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: TextInputField(
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: DropdownWidget(
+                    items: items,
+                    onChanged: (val) async {
+                      modalHudLoad(context);
+                      FirebaseOptionsModel selectedOption = options.firstWhere((el) => el.associationName == val);
+                      print(selectedOption.associationName);
+                      await Firebase.initializeApp(
+                        name: selectedOption.associationName,
+                        options: FirebaseOptions(
+                          apiKey: selectedOption.apiKey,
+                          appId: selectedOption.appId,
+                          projectId: selectedOption.projectId,
+                          messagingSenderId: selectedOption.messagingSenderId,
+                        )
+                      );
+                      Navigator.pop(context);
+                    },
                     note: "Select which homeowner association you are a part of?",
-                    label: "Association",
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: Text(
                     "Address",
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                      fontSize: SizeConfig.blockSizeVertical! * 3
-                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3!
+                        .copyWith(fontSize: SizeConfig.blockSizeVertical! * 3),
                   ),
                 ),
                 Padding(
@@ -136,12 +185,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     child: const Text(
                       "Confirm",
                     ),
-                  )
+                  ),
                 ),
               ],
             ),
           ),
-        )
+        ),
       ),
     );
   }
