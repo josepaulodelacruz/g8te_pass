@@ -8,6 +8,8 @@ import 'package:g8te_pass/common/widgets/transparent_appbar.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/widgets/text_input_field.dart';
 import 'package:g8te_pass/models/firebase_option.dart';
+import 'package:g8te_pass/services/auth-service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistraterScreen extends StatefulWidget {
   const RegistraterScreen({Key? key}) : super(key: key);
@@ -17,18 +19,28 @@ class RegistraterScreen extends StatefulWidget {
 }
 
 class _RegistraterScreenState extends State<RegistraterScreen> {
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  late AuthService authService;
+  Map<String, dynamic> values = <String, dynamic>{
+    "email": "test@email.com",
+    "password": "password",
+  };
+  late FirebaseApp selectedApp;
+  final ScrollController _scrollController = ScrollController();
+  final _formKey = GlobalKey<FormState>();
+  Color backgroundColor = Colors.transparent;
+  double elevation = 0;
+  String appBarTitle = "";
   List<String> items = [];
   List<FirebaseOptionsModel> options = [
     const FirebaseOptionsModel(
-      associationName: "G8te Pass",
+      projectName: "G8te Pass",
       appId: "1:247894978562:android:17077c2bdd17af82dcb71b",
       apiKey: "AIzaSyCuKwuPXneN8LrWytYDj7Z0IKU7ww0G0_Y",
       projectId: "g8te-pass",
       messagingSenderId: "247894978562",
     ),
     const FirebaseOptionsModel(
-      associationName: "Saint Joseph Village 6",
+      projectName: "Saint Joseph Village 6",
       appId: "1:188291409218:android:e7c5cf39f7ab1d9c0f94db",
       apiKey: "AIzaSyAjTP7RBzX8Lri7xatRWzJmxJGytjnfEuU",
       projectId: "saint-joseph-6-association",
@@ -39,10 +51,36 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
   @override
   void initState () {
     items = options.map((option) {
-      return option.associationName;
+      return option.projectName;
     }).toList();
-    print(items);
+    _scrollController.addListener(_scrollListener);
     super.initState();
+  }
+
+  _scrollListener() async {
+    if (_scrollController.offset >=
+        _scrollController.position.minScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      elevation = 1;
+      backgroundColor = Colors.white;
+      appBarTitle = "Registration";
+      setState(() {});
+    }
+
+    if (_scrollController.offset <=
+        (SizeConfig.screenHeight! * .10) &&
+        !_scrollController.position.outOfRange) {
+      backgroundColor = Colors.transparent;
+      elevation = 0;
+      appBarTitle = "";
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
 
@@ -55,8 +93,13 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: const TransparentAppBar(),
+        appBar: TransparentAppBar(
+          title: appBarTitle,
+          elevation: elevation,
+          backgroundColor: backgroundColor,
+        ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Form(
             key: _formKey,
             child: Column(
@@ -82,8 +125,8 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(20),
+                Padding(
+                  padding: const EdgeInsets.all(20),
                   child: TextInputField(
                     note: "Please select first what type of user you are?",
                     label: "Select Role",
@@ -97,10 +140,9 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     items: items,
                     onChanged: (val) async {
                       modalHudLoad(context);
-                      FirebaseOptionsModel selectedOption = options.firstWhere((el) => el.associationName == val);
-                      print(selectedOption.associationName);
+                      FirebaseOptionsModel selectedOption = options.firstWhere((el) => el.projectName == val);
                       await Firebase.initializeApp(
-                        name: selectedOption.associationName,
+                        name: selectedOption.projectName,
                         options: FirebaseOptions(
                           apiKey: selectedOption.apiKey,
                           appId: selectedOption.appId,
@@ -108,9 +150,11 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                           messagingSenderId: selectedOption.messagingSenderId,
                         )
                       );
+                      FirebaseApp selectedApp = Firebase.app(selectedOption.projectName);
+                      authService = AuthService(auth: FirebaseAuth.instanceFor(app: selectedApp));
                       Navigator.pop(context);
                     },
-                    note: "Select which homeowner association you are a part of?",
+                    note: "Select which project?",
                   ),
                 ),
                 Padding(
@@ -127,14 +171,14 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
-                    children: const [
+                    children: [
                       Flexible(
                         flex: 1,
                         child: TextInputField(
                           label: "Block",
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Flexible(
                         flex: 1,
                         child: TextInputField(
@@ -147,14 +191,14 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
-                    children: const [
+                    children: [
                       Flexible(
                         flex: 1,
                         child: TextInputField(
                           label: "Street Address (optional)",
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const  SizedBox(width: 10),
                       Flexible(
                         flex: 1,
                         child: TextInputField(
@@ -165,13 +209,40 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInputField(
                     readOnly: true,
                     initialValue: "Brgy. Butong, Cabuyao City Laguna",
                     note: "Place of residence",
                     label: "",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: TextInputField(
+                    keyboardType: TextInputType.emailAddress,
+                    label: "Email Address",
+                    onSaved: (v) {
+                      values['email'] = v;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: TextInputField(
+                    onSaved: (v) {
+                      values['password'] = v;
+                    },
+                    keyboardType: TextInputType.text,
+                    label: "Password",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: TextInputField(
+                    keyboardType: TextInputType.text,
+                    label: "Confirm Password",
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -181,7 +252,9 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     style: ElevatedButton.styleFrom(
                       primary: COLOR_DARKER_BLUE,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _handleNext();
+                    },
                     child: const Text(
                       "Confirm",
                     ),
@@ -193,5 +266,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
         ),
       ),
     );
+  }
+
+  void _handleNext () async {
+    //saved form
+    _formKey.currentState?.save();
+    var a = await authService.createAuth(email: values['email'], password: values['password']);
+    print(a);
   }
 }

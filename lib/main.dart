@@ -2,12 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/size_config.dart';
 import 'package:g8te_pass/common/string_routes.dart';
+import 'package:g8te_pass/firebase_options.dart';
 import 'package:g8te_pass/flavor_config.dart';
 import 'package:g8te_pass/router.dart' as on_router;
+import 'package:firebase_core/firebase_core.dart';
 
 //Main initializer
-void setupApp() {
+void setupApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+    // name: "DEFAULT",
+    // options: const FirebaseOptions(
+    //   appId: "1:247894978562:android:17077c2bdd17af82dcb71b",
+    //   apiKey: "AIzaSyCuKwuPXneN8LrWytYDj7Z0IKU7ww0G0_Y",
+    //   projectId: "g8te-pass",
+    //   messagingSenderId: "247894978562",
+    // )
+  );
   runApp(const MyApp());
 }
 

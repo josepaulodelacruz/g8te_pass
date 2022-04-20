@@ -2,14 +2,14 @@
 import 'package:equatable/equatable.dart';
 
 class FirebaseOptionsModel extends Equatable {
-  final String associationName;
+  final String projectName;
   final String appId;
   final String apiKey;
   final String projectId;
   final String messagingSenderId;
 
   const FirebaseOptionsModel({
-    this.associationName = "",
+    this.projectName = "",
     this.appId = "",
     this.apiKey = "",
     this.projectId = "",
@@ -17,14 +17,14 @@ class FirebaseOptionsModel extends Equatable {
   });
 
   FirebaseOptionsModel copyWith({
-    String? associationName,
+    String? projectName,
     String? appId,
     String? apiKey,
     String? projectId,
     String? messagingSenderId,
   }) {
     return FirebaseOptionsModel(
-      associationName: associationName ?? this.associationName,
+      projectName: projectName ?? this.projectName,
       appId: appId ?? this.appId,
       apiKey: apiKey ?? this.apiKey,
       projectId: projectId ?? this.projectId,
@@ -34,7 +34,7 @@ class FirebaseOptionsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    associationName,
+    projectName,
     appId,
     apiKey,
     projectId,

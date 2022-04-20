@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      children: const [
+                      children: [
                         TextInputField(
                           label: "Email",
                           keyboardType: TextInputType.emailAddress,

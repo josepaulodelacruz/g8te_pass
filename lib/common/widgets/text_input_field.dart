@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/contants.dart';
 
 class TextInputField extends StatelessWidget {
-  final String note;
-  final String label;
-  final Color labelColor;
-  final TextEditingController? controller;
-  final String hintText;
-  final bool readOnly;
-  final String initialValue;
-  final TextInputType keyboardType;
+  String note;
+  String label;
+  Color labelColor;
+  TextEditingController? controller;
+  String hintText;
+  bool readOnly;
+  String initialValue;
+  TextInputType keyboardType;
+  Function? onChanged;
+  FormFieldSetter<String>? onSaved;
 
-  const TextInputField({
+  TextInputField({
     Key? key,
     this.note = "",
     this.label = "",
@@ -21,6 +23,8 @@ class TextInputField extends StatelessWidget {
     this.readOnly = false,
     this.initialValue = "",
     this.keyboardType = TextInputType.text,
+    this.onChanged,
+    this.onSaved
   }) : super(key: key);
 
   @override
@@ -36,6 +40,16 @@ class TextInputField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          onSaved: (v) {
+            if (onSaved != null) {
+              onSaved?.call(v);
+            }
+          },
+          // onChanged: (v) {
+            // if(onChanged != null) {
+            //   onChanged?.call(v);
+            // }
+          // },
           keyboardType: TextInputType.text,
           initialValue: initialValue,
           style: const TextStyle(
