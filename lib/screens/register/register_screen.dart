@@ -6,6 +6,7 @@ import 'package:g8te_pass/blocs/auth/auth_state.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_bloc.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_event.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_state.dart';
+import 'package:g8te_pass/common/fixtures.dart';
 import 'package:g8te_pass/common/size_config.dart';
 import 'package:g8te_pass/common/utils.dart';
 import 'package:g8te_pass/common/widgets/dropdown_widget.dart';
@@ -28,8 +29,14 @@ class RegistraterScreen extends StatefulWidget {
 class _RegistraterScreenState extends State<RegistraterScreen> {
   late AuthService authService;
   Map<String, dynamic> values = <String, dynamic>{
-    "email": "test@email.com",
-    "password": "password",
+    "email": "",
+    "password": "",
+    "confirmPassword": "",
+    "role": "",
+    "block": ""
+    "lot" "",
+    "streetAddress": "",
+    "phase": "",
   };
   late FirebaseApp? _selectedApp;
   final ScrollController _scrollController = ScrollController();
@@ -39,22 +46,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
   String appBarTitle = "";
   Color iconColor = COLOR_DARK;
   List<String> items = [];
-  List<FirebaseOptionsModel> options = [
-    const FirebaseOptionsModel(
-      projectName: "Saint Joseph Village 6",
-      appId: "1:188291409218:android:e7c5cf39f7ab1d9c0f94db",
-      apiKey: "AIzaSyAjTP7RBzX8Lri7xatRWzJmxJGytjnfEuU",
-      projectId: "saint-joseph-6-association",
-      messagingSenderId: "188291409218",
-    ),
-    const FirebaseOptionsModel(
-      projectName: "Saint Joseph Village 8",
-      appId: "1:55915945481:android:b06f34c14433cd8d6ae2d8",
-      apiKey: "AIzaSyBpQvgDoIPU9vmG1dFIfRCsZD5Ja8GyvcM",
-      projectId: "saint-joseph-8-association",
-      messagingSenderId: "55915945481",
-    ),
-  ];
+
 
   @override
   void initState() {
@@ -219,6 +211,44 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                       },
                       note: "Select which project?",
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    child: Text(
+                      "Details",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(
+                          fontSize: SizeConfig.blockSizeVertical! * 3),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextInputField(
+                      label: "First Name",
+                    )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextInputField(
+                        label: "Middle Name(optional)",
+                      )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextInputField(
+                        label: "Last Name",
+                      )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextInputField(
+                        label: "Contact Number #",
+                      )
                   ),
                   Padding(
                     padding:

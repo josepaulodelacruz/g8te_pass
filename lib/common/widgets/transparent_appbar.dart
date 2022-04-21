@@ -7,6 +7,7 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color iconColor;
   final double elevation;
   final Color backgroundColor;
+
   const TransparentAppBar({
     Key? key,
     this.title,

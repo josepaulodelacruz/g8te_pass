@@ -8,6 +8,7 @@ const COLOR_GRAY = Color(0xffDCE9F6);
 const COLOR_DARK_BLUE = Color(0xff442FB2);
 const COLOR_DARK = Color(0xff0d1d50);
 const COLOR_LIGHT_BLUE = Color(0xff4ED3F5);
+
 const COLOR_DANGER = Colors.redAccent;
 const COLOR_SUCCESS = Colors.greenAccent;
 
