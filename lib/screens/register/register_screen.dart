@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:g8te_pass/blocs/auth/auth_bloc.dart';
+import 'package:g8te_pass/blocs/auth/auth_event.dart';
+import 'package:g8te_pass/blocs/auth/auth_state.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_bloc.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_event.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_state.dart';
@@ -95,19 +98,33 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: BlocListener<FirebaseBloc, FirebaseState>(
-        listener: (context, state) {
-          if(state.status == FirebaseStatus.loading) {
-            modalHudLoad(context);
-          } else if(state.status == FirebaseStatus.success) {
-            Navigator.pop(context);
-            print('firebase project ${state.app}');
-            _selectedApp = state.app;
-            setState(() {});
-          } else if(state.status == FirebaseStatus.waiting) {
-            print('standby state');
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<FirebaseBloc, FirebaseState>(
+            listener: (context, state) {
+              if(state.status == FirebaseStatus.loading) {
+                modalHudLoad(context);
+              } else if(state.status == FirebaseStatus.success) {
+                Navigator.pop(context);
+                _selectedApp = state.app;
+                setState(() {});
+              } else if(state.status == FirebaseStatus.waiting) {
+              }
+            },
+          ),
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if(state.status == AuthStatus.loading) {
+                modalHudLoad(context);
+              } else if(state.status == AuthStatus.login) {
+                Navigator.pop(context);
+              } else if(state.status == AuthStatus.failed) {
+                Navigator.pop(context);
+              } else if (state.status == AuthStatus.waiting) {
+              }
+            }
+          )
+        ],
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: TransparentAppBar(
@@ -159,13 +176,13 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                         modalHudLoad(context);
                         FirebaseOptionsModel selectedOption = options.firstWhere((el) => el.projectName == val);
                         await Firebase.initializeApp(
-                          name: selectedOption.projectName,
-                          options: FirebaseOptions(
-                            apiKey: selectedOption.apiKey,
-                            appId: selectedOption.appId,
-                            projectId: selectedOption.projectId,
-                            messagingSenderId: selectedOption.messagingSenderId,
-                          )
+                            name: selectedOption.projectName,
+                            options: FirebaseOptions(
+                              apiKey: selectedOption.apiKey,
+                              appId: selectedOption.appId,
+                              projectId: selectedOption.projectId,
+                              messagingSenderId: selectedOption.messagingSenderId,
+                            )
                         );
                         FirebaseApp selectedApp = Firebase.app(selectedOption.projectName);
                         context.read<FirebaseBloc>().add(FirebaseSelectProject(selectedApp: selectedApp));
@@ -176,7 +193,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
                       "Address",
                       style: Theme.of(context)
@@ -186,7 +203,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
                         Flexible(
@@ -288,11 +305,10 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
 
   void _handleNext () async {
     //saved form
-    // _formKey.currentState?.save();
-    // var a = await authService.createAuth(email: values['email'], password: values['password']);
-    // print(a);
-    print(_selectedApp);
-
+    _formKey.currentState?.save();
+    final bloc = context.read<AuthBloc>();
+    bloc.authService = AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
+    context.read<AuthBloc>().add(AuthLoginEmail(email: values['email'], password: values['password']));
   }
 
 }

@@ -10,8 +10,6 @@ class AuthService {
     this.auth,
   });
 
-
-
   Future<Map<String, dynamic>> createAuth({required String email, required String password}) async {
     try {
       print("creating auth user $email $password");

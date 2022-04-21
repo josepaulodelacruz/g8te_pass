@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:g8te_pass/blocs/auth/auth_bloc.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_bloc.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/size_config.dart';
@@ -8,6 +9,7 @@ import 'package:g8te_pass/firebase_options.dart';
 import 'package:g8te_pass/flavor_config.dart';
 import 'package:g8te_pass/router.dart' as on_router;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:g8te_pass/services/auth-service.dart';
 
 //Main initializer
 void setupApp() async {
@@ -39,6 +41,9 @@ class _MyAppState extends State<MyApp> {
         providers: [
           BlocProvider<FirebaseBloc>(
             create: (context) => FirebaseBloc(),
+          ),
+          BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(authService: AuthService()),
           ),
         ],
         child: MaterialApp(
