@@ -37,6 +37,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
   Color backgroundColor = Colors.transparent;
   double elevation = 0;
   String appBarTitle = "";
+  Color iconColor = COLOR_DARK;
   List<String> items = [];
   List<FirebaseOptionsModel> options = [
     const FirebaseOptionsModel(
@@ -56,7 +57,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
   ];
 
   @override
-  void initState () {
+  void initState() {
     items = options.map((option) {
       return option.projectName;
     }).toList();
@@ -68,8 +69,9 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
     if (_scrollController.offset >=
         _scrollController.position.minScrollExtent &&
         !_scrollController.position.outOfRange) {
-      elevation = 1;
-      backgroundColor = COLOR_WHITE;
+      elevation = 0;
+      backgroundColor = COLOR_DARKER_BLUE;
+      iconColor = COLOR_WHITE;
       appBarTitle = "Registration";
       setState(() {});
     }
@@ -78,6 +80,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
         (SizeConfig.screenHeight! * .10) &&
         !_scrollController.position.outOfRange) {
       backgroundColor = Colors.transparent;
+      iconColor = COLOR_DARK;
       elevation = 0;
       appBarTitle = "";
       setState(() {});
@@ -102,27 +105,44 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
         listeners: [
           BlocListener<FirebaseBloc, FirebaseState>(
             listener: (context, state) {
-              if(state.status == FirebaseStatus.loading) {
+              if (state.status == FirebaseStatus.loading) {
                 modalHudLoad(context);
-              } else if(state.status == FirebaseStatus.success) {
+              } else if (state.status == FirebaseStatus.success) {
                 Navigator.pop(context);
                 _selectedApp = state.app;
                 setState(() {});
-              } else if(state.status == FirebaseStatus.waiting) {
-              }
+              } else if (state.status == FirebaseStatus.waiting) {}
             },
           ),
           BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if(state.status == AuthStatus.loading) {
-                modalHudLoad(context);
-              } else if(state.status == AuthStatus.login) {
-                Navigator.pop(context);
-              } else if(state.status == AuthStatus.failed) {
-                Navigator.pop(context);
-              } else if (state.status == AuthStatus.waiting) {
+              listener: (context, state) {
+                if (state.status == AuthStatus.loading) {
+                  modalHudLoad(context);
+                } else if (state.status == AuthStatus.login) {
+                  Navigator.pop(context);
+                  defaultDialog(
+                      context,
+                      icon: const Icon(
+                          Icons.check_rounded, color: COLOR_SUCCESS),
+                      title: "Congratulations!",
+                      message: state.loginMessage,
+                      onOk: () {
+                        Navigator.pop(context);
+                      }
+                  );
+                } else if (state.status == AuthStatus.failed) {
+                  Navigator.pop(context);
+                  defaultDialog(
+                      context,
+                      icon: const Icon(Icons.error, color: COLOR_DANGER),
+                      title: "Failed Registration!",
+                      message: state.loginMessage,
+                      onOk: () {
+                        Navigator.pop(context);
+                      }
+                  );
+                } else if (state.status == AuthStatus.waiting) {}
               }
-            }
           )
         ],
         child: Scaffold(
@@ -131,6 +151,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
             title: appBarTitle,
             elevation: elevation,
             backgroundColor: backgroundColor,
+            iconColor: iconColor,
           ),
           body: SingleChildScrollView(
             controller: _scrollController,
@@ -148,11 +169,15 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 20, bottom: 20),
+                            padding: const EdgeInsets.only(
+                                left: 20, bottom: 20),
                             child: Text(
                               "Registration",
                               textAlign: TextAlign.left,
-                              style: Theme.of(context).textTheme.headline2!,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline2!,
                             ),
                           )
                         ],
@@ -174,18 +199,22 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                       items: items,
                       onChanged: (val) async {
                         modalHudLoad(context);
-                        FirebaseOptionsModel selectedOption = options.firstWhere((el) => el.projectName == val);
+                        FirebaseOptionsModel selectedOption = options
+                            .firstWhere((el) => el.projectName == val);
                         await Firebase.initializeApp(
                             name: selectedOption.projectName,
                             options: FirebaseOptions(
                               apiKey: selectedOption.apiKey,
                               appId: selectedOption.appId,
                               projectId: selectedOption.projectId,
-                              messagingSenderId: selectedOption.messagingSenderId,
+                              messagingSenderId: selectedOption
+                                  .messagingSenderId,
                             )
                         );
-                        FirebaseApp selectedApp = Firebase.app(selectedOption.projectName);
-                        context.read<FirebaseBloc>().add(FirebaseSelectProject(selectedApp: selectedApp));
+                        FirebaseApp selectedApp = Firebase.app(selectedOption
+                            .projectName);
+                        context.read<FirebaseBloc>().add(FirebaseSelectProject(
+                            selectedApp: selectedApp));
                         Navigator.pop(context);
                       },
                       note: "Select which project?",
@@ -196,10 +225,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
                       "Address",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .headline3!
-                          .copyWith(fontSize: SizeConfig.blockSizeVertical! * 3),
+                          .copyWith(
+                          fontSize: SizeConfig.blockSizeVertical! * 3),
                     ),
                   ),
                   Padding(
@@ -232,7 +263,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                             label: "Street Address (optional)",
                           ),
                         ),
-                        const  SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Flexible(
                           flex: 1,
                           child: TextInputField(
@@ -253,7 +284,8 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 5),
                     child: TextInputField(
                       keyboardType: TextInputType.emailAddress,
                       label: "Email Address",
@@ -263,7 +295,8 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 5),
                     child: TextInputField(
                       onSaved: (v) {
                         values['password'] = v;
@@ -273,7 +306,8 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 5),
                     child: TextInputField(
                       keyboardType: TextInputType.text,
                       label: "Confirm Password",
@@ -303,12 +337,15 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
     );
   }
 
-  void _handleNext () async {
+  void _handleNext() async {
     //saved form
     _formKey.currentState?.save();
     final bloc = context.read<AuthBloc>();
-    bloc.authService = AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
-    context.read<AuthBloc>().add(AuthLoginEmail(email: values['email'], password: values['password']));
+    ///initialize the firebase project
+    bloc.authService =
+        AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
+    context.read<AuthBloc>().add(
+        AuthLoginEmail(email: values['email'], password: values['password']));
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/contants.dart';
+import 'package:g8te_pass/common/widgets/default_dialog.dart';
 
 void modalHudLoad(context,
     {String load = "Loading...",
@@ -23,5 +24,24 @@ void modalHudLoad(context,
         ],
       ),
     ),
+  );
+}
+
+void defaultDialog(context, {
+  required String title,
+  required String message,
+  final Function? onOk,
+  final Icon? icon,
+}) {
+  showDialog(
+    context: context,
+    builder: (_) => DefaultDialog(
+      icon: icon!,
+      title: title,
+      message: message,
+      onOk: () {
+        onOk?.call();
+      },
+    )
   );
 }

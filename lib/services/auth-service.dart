@@ -17,15 +17,18 @@ class AuthService {
           email: email, password: password);
       auth!.signInWithEmailAndPassword(email: email, password: password);
       return {
-        "success": true,
-        "id": result.user!.uid
+        "failed": false,
+        "id": result.user!.uid,
+        "message": "You have successfully signed up!",
       };
     } catch (e) {
+      print(e);
       print("failed creating email password");
       // throw Exception('Error encountered. Please try again.');
       return {
-        "success": false,
+        "failed": true,
         "id": null,
+        "message": e.toString(),
       };
     }
   }
