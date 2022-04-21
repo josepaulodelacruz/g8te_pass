@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:g8te_pass/blocs/firebase/firebase_bloc.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/size_config.dart';
 import 'package:g8te_pass/common/string_routes.dart';
@@ -33,11 +35,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: createTheme(context),
-      title: FlavorConfig.instance.values.appName,
-      initialRoute: splashScreen,
-      onGenerateRoute: on_router.Router.generateRoute,
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<FirebaseBloc>(
+            create: (context) => FirebaseBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          theme: createTheme(context),
+          title: FlavorConfig.instance.values.appName,
+          initialRoute: splashScreen,
+          onGenerateRoute: on_router.Router.generateRoute,
+        )
     );
   }
 }
