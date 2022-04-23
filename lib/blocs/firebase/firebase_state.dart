@@ -8,13 +8,16 @@ enum FirebaseStatus {
   loading,
   success,
   failed,
+  deleting,
 }
 
 class FirebaseState extends Equatable {
+  final FirebaseApp? mainApp;
   final FirebaseApp? app;
   final FirebaseStatus status;
 
   const FirebaseState._({
+    this.mainApp,
     this.app,
     this.status = FirebaseStatus.waiting,
   });
@@ -22,10 +25,12 @@ class FirebaseState extends Equatable {
   const FirebaseState.unknown() : this._();
 
   FirebaseState copyWith({
+    FirebaseApp? mainApp,
     FirebaseApp? app,
     FirebaseStatus? status,
   }) {
     return FirebaseState._(
+      mainApp: mainApp ?? this.mainApp,
       app: app ?? this.app,
       status: status ?? this.status,
     );
@@ -33,5 +38,9 @@ class FirebaseState extends Equatable {
 
 
   @override
-  List<Object?> get props => [app, status];
+  List<Object?> get props => [
+    mainApp,
+    app,
+    status
+  ];
 }

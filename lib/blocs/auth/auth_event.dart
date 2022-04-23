@@ -19,3 +19,15 @@ class AuthLoginEmail extends AuthEvent {
   @override
   String toString() => 'AuthLoginEmail { email: $email, password: $password }';
 }
+
+class AuthAddUserCredentials extends AuthEvent {
+  final Map<String, String> userCredentials;
+
+  const AuthAddUserCredentials({this.userCredentials = const {}});
+
+  @override
+  List<Object> get props => [userCredentials];
+
+  @override
+  String toString() => 'AuthAddUserCredentials { userCredentials: $userCredentials }';
+}

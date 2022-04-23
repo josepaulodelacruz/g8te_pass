@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:g8te_pass/blocs/auth/auth_event.dart';
 import 'package:g8te_pass/blocs/auth/auth_state.dart';
 import 'package:g8te_pass/services/auth-service.dart';
+import 'package:g8te_pass/services/database-service.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthService authService;
+  DatabaseService databaseService;
 
-  AuthBloc({required this.authService}) : super(const AuthState.unknown()) {
+  AuthBloc({required this.authService, required this.databaseService}) : super(const AuthState.unknown()) {
     on<AuthLoginEmail>(_loginEmail);
+    on<AuthAddUserCredentials>(_addUserCredentials);
   }
 
   void _loginEmail(AuthLoginEmail event, Emitter<AuthState> emit) async {
@@ -21,6 +24,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copyWith(status: AuthStatus.failed, loginMessage: "The email address is already in use by another account."));
     }
     emit(state.copyWith(status: AuthStatus.waiting));
+  }
+
+  void _addUserCredentials(AuthAddUserCredentials event, Emitter<AuthState> emit) async {
+    databaseService.addUserInMainFirebaseCollection();
   }
 
 }

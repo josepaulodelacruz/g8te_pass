@@ -8,6 +8,18 @@ abstract class FirebaseEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class FirebaseMainProject extends FirebaseEvent {
+  final FirebaseApp? defaultApp;
+
+  const FirebaseMainProject({
+    this.defaultApp,
+  });
+
+  @override
+  List<Object> get props => [];
+
+}
+
 class FirebaseSelectProject extends FirebaseEvent {
   final FirebaseApp? selectedApp;
 

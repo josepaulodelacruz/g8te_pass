@@ -18,6 +18,7 @@ import 'package:g8te_pass/models/firebase_option.dart';
 import 'package:g8te_pass/services/auth-service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:g8te_pass/services/database-service.dart';
 
 class RegistraterScreen extends StatefulWidget {
   const RegistraterScreen({Key? key}) : super(key: key);
@@ -29,9 +30,12 @@ class RegistraterScreen extends StatefulWidget {
 class _RegistraterScreenState extends State<RegistraterScreen> {
   late AuthService authService;
   Map<String, dynamic> values = <String, dynamic>{
+    "firstName": "",
+    "middleName": "",
+    "lastName": "",
+    "contactNumber": "",
     "email": "",
     "password": "",
-    "confirmPassword": "",
     "role": "",
     "block": ""
     "lot" "",
@@ -102,8 +106,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
               } else if (state.status == FirebaseStatus.success) {
                 Navigator.pop(context);
                 _selectedApp = state.app;
+                //create a new instance every changes
+                context.read<AuthBloc>().databaseService = DatabaseService(mainApp: Firebase.apps[0], selectedApp: _selectedApp!);
                 setState(() {});
-              } else if (state.status == FirebaseStatus.waiting) {}
+              } else if (state.status == FirebaseStatus.deleting) {
+                _selectedApp = null;
+              }  else if(state.status == FirebaseStatus.waiting) {}
             },
           ),
           BlocListener<AuthBloc, AuthState>(
@@ -138,6 +146,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
           )
         ],
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              List<FirebaseApp> apps = Firebase.apps;
+            },
+            child: Icon(Icons.add),
+          ),
           extendBodyBehindAppBar: true,
           appBar: TransparentAppBar(
             title: appBarTitle,
@@ -178,16 +192,28 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: TextInputField(
-                      note: "Please select first what type of user you are?",
-                      label: "Select Role",
-                      hintText: "Homeowner",
+                    child: DropdownWidget(
+                      validator: (v) {
+                        if(v == null || v.contains('null') || v.isEmpty) {
+                          return "Please select your which role";
+                        }
+                      },
+                      onChanged: (v) {
+                        values['role'] = v;
+                      },
+                      items: roles,
+                      note: "Select your role.",
                     ),
                   ),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: DropdownWidget(
+                      validator: (v) {
+                        if(v == null || v.contains('null') || v.isEmpty) {
+                          return "Please select the association you're within!";
+                        }
+                      },
                       items: items,
                       onChanged: (val) async {
                         modalHudLoad(context);
@@ -229,25 +255,53 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextInputField(
+                      validator: (v) {
+                        if(v!.isEmpty) {
+                          return "Please enter your first name.";
+                        }
+                      },
                       label: "First Name",
+                      onSaved: (v) {
+                        values['firstName'] = v;
+                      },
                     )
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextInputField(
                         label: "Middle Name(optional)",
+                        onSaved: (v) {
+                          values['middleName'] = v ?? "";
+                        },
                       )
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextInputField(
+                        validator: (v) {
+                          if(v!.isEmpty) {
+                            return "Please enter your last name.";
+                          }
+                        },
                         label: "Last Name",
+                        onSaved: (v) {
+                          values['lastName'] = v;
+                        },
                       )
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TextInputField(
+                        validator: (v) {
+                          if(v!.isEmpty) {
+                            return "Please enter your contact number";
+                          }
+                        },
                         label: "Contact Number #",
+                        keyboardType: TextInputType.number,
+                        onSaved: (v) {
+                          values['contactNumber'] = v;
+                        },
                       )
                   ),
                   Padding(
@@ -270,14 +324,30 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                         Flexible(
                           flex: 1,
                           child: TextInputField(
+                            validator: (v) {
+                              if(v!.isEmpty) {
+                                return "Please enter your block.";
+                              }
+                            },
                             label: "Block",
+                            onSaved: (v) {
+                              values['block'] = v;
+                            },
                           ),
                         ),
                         const SizedBox(width: 10),
                         Flexible(
                           flex: 1,
                           child: TextInputField(
+                            validator: (v) {
+                              if(v!.isEmpty) {
+                                return "Please enter your lot.";
+                              }
+                            },
                             label: "Lot",
+                            onSaved: (v) {
+                              values['lot'] = v;
+                            },
                           ),
                         ),
                       ],
@@ -291,13 +361,24 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                           flex: 1,
                           child: TextInputField(
                             label: "Street Address (optional)",
+                            onSaved: (v) {
+                              values['streetAddress'] = v;
+                            },
                           ),
                         ),
                         const SizedBox(width: 10),
                         Flexible(
                           flex: 1,
                           child: TextInputField(
+                            validator: (v) {
+                              if(v!.isEmpty) {
+                                return "Please enter your phase.";
+                              }
+                            },
                             label: "Phase",
+                            onSaved: (v) {
+                              values['phase'] = v;
+                            },
                           ),
                         ),
                       ],
@@ -318,6 +399,11 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                         horizontal: 20, vertical: 5),
                     child: TextInputField(
                       keyboardType: TextInputType.emailAddress,
+                      validator: (v) {
+                        if(v!.isEmpty) {
+                          return "Please enter your email address.";
+                        }
+                      },
                       label: "Email Address",
                       onSaved: (v) {
                         values['email'] = v;
@@ -328,6 +414,12 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 5),
                     child: TextInputField(
+                      visible: true,
+                      validator: (v) {
+                        if(v!.isEmpty) {
+                          return "Please enter your password.";
+                        }
+                      },
                       onSaved: (v) {
                         values['password'] = v;
                       },
@@ -339,8 +431,19 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 5),
                     child: TextInputField(
+                      visible: true,
+                      validator: (v) {
+                        if(v!.isEmpty) {
+                          return "Please confirm your password";
+                        } else if(!v.contains(values['password'])) {
+                          return "Password does not match";
+                        }
+                      },
                       keyboardType: TextInputType.text,
                       label: "Confirm Password",
+                      onSaved: (v) {
+                        values['confirmPassword'] = v;
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -369,13 +472,19 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
 
   void _handleNext() async {
     //saved form
-    _formKey.currentState?.save();
-    final bloc = context.read<AuthBloc>();
-    ///initialize the firebase project
-    bloc.authService =
-        AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
-    context.read<AuthBloc>().add(
-        AuthLoginEmail(email: values['email'], password: values['password']));
+    // _formKey.currentState?.save();
+    // bool status = _formKey.currentState!.validate.call();
+    // if(status) {
+    //   final bloc = context.read<AuthBloc>();
+    //   ///initialize the firebase project
+    //   bloc.authService =
+    //       AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
+    //   context.read<AuthBloc>().add(
+    //       AuthLoginEmail(email: values['email'], password: values['password']));
+    //
+    // }
+    context.read<AuthBloc>().add(AuthAddUserCredentials());
+
   }
 
 }

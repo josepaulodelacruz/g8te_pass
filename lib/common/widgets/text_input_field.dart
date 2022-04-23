@@ -12,8 +12,10 @@ class TextInputField extends StatelessWidget {
   TextInputType keyboardType;
   Function? onChanged;
   FormFieldSetter<String>? onSaved;
+  FormFieldValidator<String>? validator;
+  bool visible;
 
-  TextInputField({
+    TextInputField({
     Key? key,
     this.note = "",
     this.label = "",
@@ -24,7 +26,9 @@ class TextInputField extends StatelessWidget {
     this.initialValue = "",
     this.keyboardType = TextInputType.text,
     this.onChanged,
-    this.onSaved
+    this.onSaved,
+    this.validator,
+    this.visible = false,
   }) : super(key: key);
 
   @override
@@ -40,6 +44,8 @@ class TextInputField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          obscureText: visible,
+          validator: (v) => validator?.call(v),
           onSaved: (v) {
             if (onSaved != null) {
               onSaved?.call(v);

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/size_config.dart';
 
 class DropdownWidget extends StatelessWidget {
-  final String note;
-  final Function onChanged;
-  final List<String> items;
+   String note;
+   Function onChanged;
+   List<String> items;
+  FormFieldValidator<String>? validator;
 
 
-  const DropdownWidget({
+  DropdownWidget({
     Key? key,
     this.note = "",
     required this.onChanged,
     required this.items,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class DropdownWidget extends StatelessWidget {
           ),
         ),
         DropdownButtonFormField(
+          validator: (v) => validator?.call("${v.toString()}"),
           onChanged: (val) {
             onChanged(val);
           },
