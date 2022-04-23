@@ -8,6 +8,7 @@ void main () async {
     values: FlavorValues(
       appName: "G8te Pass Dev",
       baseUrl: "",
+      namespace: "dev_",
     ),
   );
   setupApp();

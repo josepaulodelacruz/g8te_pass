@@ -8,10 +8,11 @@ class DatabaseService extends MainFirestoreService with SelectedFirestoreService
   FirebaseApp mainApp;
   FirebaseApp selectedApp;
 
-
-  DatabaseService({required this.mainApp, required this.selectedApp}) : super(app: mainApp) {
+  DatabaseService({required this.mainApp, required this.selectedApp}) : super(app: mainApp, collectionName: "accounts") {
     print("Current App: ${selectedApp}");
     db = FirebaseFirestore.instanceFor(app: selectedApp);
+    collectionName = "${namespace}accounts";
+    collection = db.collection(collectionName);
   }
 
   Future<void> addUserInMainFirebaseCollection() async {
