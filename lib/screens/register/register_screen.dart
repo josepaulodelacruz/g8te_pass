@@ -474,13 +474,6 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
     _formKey.currentState?.save();
     bool status = _formKey.currentState!.validate.call();
     if(status) {
-      final bloc = context.read<AuthBloc>();
-      ///initialize the firebase project
-      // bloc.authService =
-      //     AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
-
-      //store details inside the main firebase project
-
       // able to save user credentials state management;
       UserModel _user = UserModel(
         role: values['role'],
@@ -497,13 +490,10 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
           placeOfResidence: "Brgy. Butong Cabuyao City Laguna",
         ),
         emailAddress: values['email'],
+        password: values['password'],
       );
-      context.read<AuthBloc>().add(AuthAddUserCredentials(userCredentials: _user));
-
-
+      context.read<AuthBloc>().add(AuthAddUserCredentials(selectedApp: _selectedApp!, userCredentials: _user));
     }
-    // context.read<AuthBloc>().add(AuthAddUserCredentials());
-
   }
 
 }

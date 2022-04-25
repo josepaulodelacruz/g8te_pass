@@ -13,6 +13,7 @@ class UserModel extends Equatable {
   final String contactNumber;
   final String emailAddress;
   final AddressModel address;
+  final String password;
 
   const UserModel({
     this.id = "",
@@ -24,6 +25,7 @@ class UserModel extends Equatable {
     this.contactNumber = "",
     this.emailAddress = "",
     this.address = AddressModel.empty,
+    this.password = "",
   });
 
   static const empty = UserModel();
@@ -32,7 +34,7 @@ class UserModel extends Equatable {
     return {
       'id': id,
       'role': role,
-      'homeOwner': homeOwner,
+      'homeOwner': homeOwner?.toMap() ?? {} as Map<String, dynamic>,
       'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
@@ -51,6 +53,7 @@ class UserModel extends Equatable {
     String? lastName,
     String? contactNumber,
     String? emailAddress,
+    String? password,
     AddressModel? address,
   }) {
     return UserModel(
@@ -62,6 +65,7 @@ class UserModel extends Equatable {
       lastName: lastName ?? this.lastName,
       contactNumber: contactNumber ?? this.contactNumber,
       emailAddress: emailAddress ?? this.emailAddress,
+      password: password ?? this.password,
       address: address ?? this.address,
     );
   }
@@ -83,7 +87,8 @@ class UserModel extends Equatable {
     middleName,
     contactNumber,
     emailAddress,
-    address
+    password,
+    address,
   ];
 }
 

@@ -16,6 +16,18 @@ class FirebaseOptionsModel extends Equatable {
     this.messagingSenderId = "",
   });
 
+  //create a map function
+  Map<String, dynamic> toMap() {
+    return {
+      'projectName': projectName,
+      'appId': appId,
+      'apiKey': apiKey,
+      'projectId': projectId,
+      'messagingSenderId': messagingSenderId,
+    };
+  }
+
+
   FirebaseOptionsModel copyWith({
     String? projectName,
     String? appId,

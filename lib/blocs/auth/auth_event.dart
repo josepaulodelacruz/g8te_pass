@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:g8te_pass/models/user_model.dart';
 
 abstract class AuthEvent extends Equatable {
@@ -23,11 +25,12 @@ class AuthLoginEmail extends AuthEvent {
 
 class AuthAddUserCredentials extends AuthEvent {
   final UserModel userCredentials;
+  final FirebaseApp selectedApp;
 
-  const AuthAddUserCredentials({this.userCredentials = UserModel.empty});
+  const AuthAddUserCredentials({this.userCredentials = UserModel.empty, required this.selectedApp});
 
   @override
-  List<Object> get props => [userCredentials];
+  List<Object> get props => [userCredentials, selectedApp];
 
   @override
   String toString() => 'AuthAddUserCredentials { userCredentials: $userCredentials }';

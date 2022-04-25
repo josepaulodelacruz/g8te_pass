@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:g8te_pass/flavor_config.dart';
+import 'package:g8te_pass/models/user_model.dart';
 
 mixin SelectedFirestoreService {
   late FirebaseFirestore db;
@@ -10,11 +11,13 @@ mixin SelectedFirestoreService {
   String collectionName = "";
 
 
-  create() async {
+  Future<void> create(UserModel user, String id) async {
     try {
-      print("selected db is ${db.app}");
-      await db.collection('test').add({'test': 'test'});
+      await collection.doc(id).set({
+        ...user.toMap()},
+          SetOptions(merge: true));
     } catch (e) {
+      ///throw api error
       print('error: $e');
     }
   }
