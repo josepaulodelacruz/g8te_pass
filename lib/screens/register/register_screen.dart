@@ -18,7 +18,7 @@ import 'package:g8te_pass/models/firebase_option.dart';
 import 'package:g8te_pass/services/auth-service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:g8te_pass/services/database-service.dart';
+import 'package:g8te_pass/services/user-database-service.dart';
 
 class RegistraterScreen extends StatefulWidget {
   const RegistraterScreen({Key? key}) : super(key: key);
@@ -107,7 +107,7 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                 Navigator.pop(context);
                 _selectedApp = state.app;
                 //create a new instance every changes
-                context.read<AuthBloc>().databaseService = DatabaseService(mainApp: Firebase.apps[0], selectedApp: _selectedApp!);
+                context.read<AuthBloc>().databaseService = UserDatabaseService(mainApp: Firebase.apps.last, selectedApp: _selectedApp!);
                 setState(() {});
               } else if (state.status == FirebaseStatus.deleting) {
                 _selectedApp = null;
@@ -146,12 +146,6 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
           )
         ],
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              List<FirebaseApp> apps = Firebase.apps;
-            },
-            child: Icon(Icons.add),
-          ),
           extendBodyBehindAppBar: true,
           appBar: TransparentAppBar(
             title: appBarTitle,
@@ -471,16 +465,18 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
   }
 
   void _handleNext() async {
-    //saved form
+    // saved form
     // _formKey.currentState?.save();
     // bool status = _formKey.currentState!.validate.call();
     // if(status) {
     //   final bloc = context.read<AuthBloc>();
     //   ///initialize the firebase project
-    //   bloc.authService =
-    //       AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
-    //   context.read<AuthBloc>().add(
-    //       AuthLoginEmail(email: values['email'], password: values['password']));
+    //   // bloc.authService =
+    //   //     AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
+    //
+    //   //store details inside the main firebase project
+    //
+    //
     //
     // }
     context.read<AuthBloc>().add(AuthAddUserCredentials());

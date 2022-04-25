@@ -11,7 +11,7 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TransparentAppBar({
     Key? key,
     this.title,
-    this.iconColor = COLOR_WHITE,
+    this.iconColor = COLOR_DARKER_BLUE,
     this.elevation = 0,
     this.backgroundColor = Colors.transparent,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);

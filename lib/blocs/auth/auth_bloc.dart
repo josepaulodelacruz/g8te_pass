@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:g8te_pass/blocs/auth/auth_event.dart';
 import 'package:g8te_pass/blocs/auth/auth_state.dart';
 import 'package:g8te_pass/services/auth-service.dart';
-import 'package:g8te_pass/services/database-service.dart';
+import 'package:g8te_pass/services/user-database-service.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthService authService;
-  DatabaseService databaseService;
+  UserDatabaseService databaseService;
 
   AuthBloc({required this.authService, required this.databaseService}) : super(const AuthState.unknown()) {
     on<AuthLoginEmail>(_loginEmail);

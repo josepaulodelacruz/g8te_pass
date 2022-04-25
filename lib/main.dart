@@ -12,20 +12,16 @@ import 'package:g8te_pass/main-dev.dart';
 import 'package:g8te_pass/router.dart' as on_router;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:g8te_pass/services/auth-service.dart';
-import 'package:g8te_pass/services/database-service.dart';
+import 'package:g8te_pass/services/user-database-service.dart';
 
 //Main initializer
 void setupApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var defaultApp = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp(mainApp: defaultApp));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  final FirebaseApp mainApp;
-  const MyApp({Key? key, required this.mainApp}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -37,8 +33,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    mainApp = widget.mainApp;
+    _initializeMainFirebaseProject();
     super.initState();
+  }
+
+  Future<void> _initializeMainFirebaseProject () async {
+    mainApp = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    setState(() {});
   }
 
   @override
@@ -51,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authService: AuthService(),
-              databaseService: DatabaseService(
+              databaseService: UserDatabaseService(
                 mainApp: mainApp,
                 selectedApp: Firebase.apps[0],
               ),

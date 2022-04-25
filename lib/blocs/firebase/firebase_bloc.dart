@@ -3,7 +3,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_event.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_state.dart';
-import 'package:g8te_pass/services/database-service.dart';
+import 'package:g8te_pass/services/user-database-service.dart';
 
 class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
 
@@ -14,6 +14,7 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
 
   void _initializeMainFirebaseProject (FirebaseMainProject event, Emitter<FirebaseState> emit) async {
     emit(state.copyWith(mainApp: event.defaultApp));
+    print('initilized main firebase project ${state.mainApp}');
   }
 
   void _selectFirebaseApp(FirebaseSelectProject event, Emitter<FirebaseState> emit) async {

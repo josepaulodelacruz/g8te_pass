@@ -9,7 +9,7 @@ import 'package:g8te_pass/common/size_config.dart';
 import 'package:g8te_pass/common/string_routes.dart';
 import 'package:g8te_pass/common/widgets/gradient_background.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:g8te_pass/services/database-service.dart';
+import 'package:g8te_pass/services/user-database-service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -24,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen>{
   void initState() {
     Future.delayed(const Duration(seconds: 1), () {
       List<FirebaseApp> apps = Firebase.apps;
-      context.read<FirebaseBloc>().add(FirebaseMainProject(defaultApp: apps.first));
+      print(apps);
+      context.read<FirebaseBloc>().add(FirebaseMainProject(defaultApp: apps.last));
       Navigator.pushNamed(context, launchScreen);
     });
     super.initState();

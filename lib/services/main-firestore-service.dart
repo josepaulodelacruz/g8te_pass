@@ -4,23 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:g8te_pass/flavor_config.dart';
 
-class MainFirestoreService {
+mixin MainFirestoreService {
   late FirebaseFirestore mDb;
-  late CollectionReference collection;
-  String collectionName = "";
+  late CollectionReference mainCollection;
+  String mainCollectionName = "";
 
-  MainFirestoreService({required FirebaseApp app, required String collectionName}) {
-    String namespace = FlavorConfig.instance.values.namespace;
-    mDb = FirebaseFirestore.instanceFor(app: app);
-    this.collectionName = "$namespace$collectionName";
-    print(this.collectionName);
-    collection = mDb.collection(collectionName);
-    print('main database mDb: $mDb');
-  }
-
-  create() async {
+  mainCreate() async {
     try {
-      await mDb.collection('test').add({'test': 'test'});
+      print("main ${mDb.app.name}");
+      await mainCollection.add({"test": "test"});
     } catch (e) {
       print('error: $e');
     }
