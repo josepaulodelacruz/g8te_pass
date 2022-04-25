@@ -24,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen>{
   void initState() {
     Future.delayed(const Duration(seconds: 1), () {
       List<FirebaseApp> apps = Firebase.apps;
-      print(apps);
       context.read<FirebaseBloc>().add(FirebaseMainProject(defaultApp: apps.last));
       Navigator.pushNamed(context, launchScreen);
     });

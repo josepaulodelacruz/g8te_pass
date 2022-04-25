@@ -27,7 +27,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _addUserCredentials(AuthAddUserCredentials event, Emitter<AuthState> emit) async {
-    databaseService.addUserInMainFirebaseCollection();
+    print('bloc');
+    print(event.userCredentials);
+    emit(state.copyWith(status: AuthStatus.loading));
+    await Future.delayed(const Duration(seconds: 2));
+    emit(state.copyWith(user: event.userCredentials, status: AuthStatus.login));
+    print(state.user.toString());
+
+    // databaseService.addUserInMainFirebaseCollection();
   }
 
 }

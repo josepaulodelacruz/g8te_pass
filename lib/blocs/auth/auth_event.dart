@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:g8te_pass/models/user_model.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -21,9 +22,9 @@ class AuthLoginEmail extends AuthEvent {
 }
 
 class AuthAddUserCredentials extends AuthEvent {
-  final Map<String, String> userCredentials;
+  final UserModel userCredentials;
 
-  const AuthAddUserCredentials({this.userCredentials = const {}});
+  const AuthAddUserCredentials({this.userCredentials = UserModel.empty});
 
   @override
   List<Object> get props => [userCredentials];

@@ -15,6 +15,7 @@ import 'package:g8te_pass/common/widgets/transparent_appbar.dart';
 import 'package:g8te_pass/common/contants.dart';
 import 'package:g8te_pass/common/widgets/text_input_field.dart';
 import 'package:g8te_pass/models/firebase_option.dart';
+import 'package:g8te_pass/models/user_model.dart';
 import 'package:g8te_pass/services/auth-service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,8 +42,10 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
     "lot" "",
     "streetAddress": "",
     "phase": "",
+    "placeOfResidence": "",
   };
   late FirebaseApp? _selectedApp;
+  late FirebaseOptionsModel _selectedAppOptions;
   final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
   Color backgroundColor = Colors.transparent;
@@ -227,9 +230,11 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
                             .projectName);
                         context.read<FirebaseBloc>().add(FirebaseSelectProject(
                             selectedApp: selectedApp));
+                        _selectedAppOptions = selectedOption;
+                        setState(() {});
                         Navigator.pop(context);
                       },
-                      note: "Select which project?",
+                      note: "Select which association you're within.",
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -466,20 +471,38 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
 
   void _handleNext() async {
     // saved form
-    // _formKey.currentState?.save();
-    // bool status = _formKey.currentState!.validate.call();
-    // if(status) {
-    //   final bloc = context.read<AuthBloc>();
-    //   ///initialize the firebase project
-    //   // bloc.authService =
-    //   //     AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
-    //
-    //   //store details inside the main firebase project
-    //
-    //
-    //
-    // }
-    context.read<AuthBloc>().add(AuthAddUserCredentials());
+    _formKey.currentState?.save();
+    bool status = _formKey.currentState!.validate.call();
+    if(status) {
+      final bloc = context.read<AuthBloc>();
+      ///initialize the firebase project
+      // bloc.authService =
+      //     AuthService(auth: FirebaseAuth.instanceFor(app: _selectedApp!));
+
+      //store details inside the main firebase project
+
+      // able to save user credentials state management;
+      UserModel _user = UserModel(
+        role: values['role'],
+        homeOwner: _selectedAppOptions,
+        firstName: values['firstName'],
+        middleName: values['middleName'],
+        lastName: values['lastName'],
+        contactNumber: values['contactNumber'],
+        address: AddressModel(
+          block: values['block'],
+          lot: values['lot'],
+          stAddress: values['street'] ?? "",
+          phase: values['phase'],
+          placeOfResidence: "Brgy. Butong Cabuyao City Laguna",
+        ),
+        emailAddress: values['email'],
+      );
+      context.read<AuthBloc>().add(AuthAddUserCredentials(userCredentials: _user));
+
+
+    }
+    // context.read<AuthBloc>().add(AuthAddUserCredentials());
 
   }
 
