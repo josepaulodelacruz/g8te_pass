@@ -57,6 +57,7 @@ class TextInputField extends StatelessWidget {
             // }
           // },
           keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.next,
           initialValue: initialValue,
           style: const TextStyle(
             fontFamily: FONT,

@@ -7,6 +7,7 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color iconColor;
   final double elevation;
   final Color backgroundColor;
+  final Color appBarTitleColor;
 
   const TransparentAppBar({
     Key? key,
@@ -14,6 +15,7 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.iconColor = COLOR_DARKER_BLUE,
     this.elevation = 0,
     this.backgroundColor = Colors.transparent,
+    this.appBarTitleColor = COLOR_WHITE,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
@@ -26,8 +28,8 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       title: Text(
         title ?? '',
-        style: const TextStyle(
-          color: COLOR_WHITE,
+        style: TextStyle(
+          color: appBarTitleColor,
           fontSize: 20,
         ),
       ),

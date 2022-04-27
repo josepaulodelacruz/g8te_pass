@@ -10,6 +10,15 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AuthSavedDetails extends AuthEvent {
+  final UserModel user;
+
+  const AuthSavedDetails({this.user = UserModel.empty});
+
+  @override
+  List<Object> get props => [];
+}
+
 class AuthLoginEmail extends AuthEvent {
   final String email;
   final String password;

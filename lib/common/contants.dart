@@ -23,9 +23,13 @@ const FONT_BOLD = "Comic-Bold";
 
 const String dev_endpoint = "http://10.0.2.2:8000";
 
+const appBarTheme = AppBarTheme(
+  backgroundColor: COLOR_DARKER_BLUE
+);
+
 ThemeData createTheme(BuildContext context) {
   return ThemeData(
-    // appBarTheme: appBarTheme,
+    appBarTheme: appBarTheme,
     scaffoldBackgroundColor: COLOR_GRAY,
     textTheme: const TextTheme(
       headline1: TextStyle(
@@ -49,6 +53,12 @@ ThemeData createTheme(BuildContext context) {
         color: COLOR_DARK,
         fontWeight: FontWeight.w700,
         fontSize: 18,
+      ),
+      subtitle2: TextStyle(
+        fontFamily: FONT_BOLD,
+        color: COLOR_WHITE,
+        fontWeight: FontWeight.w700,
+        fontSize: 16,
       ),
       button: TextStyle(
         fontFamily: FONT,

@@ -11,8 +11,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc({required this.authService, required this.databaseService})
       : super(const AuthState.unknown()) {
+    on<AuthSavedDetails>(_savedDetails);
     on<AuthLoginEmail>(_loginEmail);
     on<AuthAddUserCredentials>(_addUserCredentials);
+  }
+
+  void _savedDetails(AuthSavedDetails event, Emitter<AuthState> emit) {
+    emit(state.copyWith(user: event.user));
   }
 
   void _loginEmail(AuthLoginEmail event, Emitter<AuthState> emit) async {

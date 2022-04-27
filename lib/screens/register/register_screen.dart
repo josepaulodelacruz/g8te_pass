@@ -8,6 +8,7 @@ import 'package:g8te_pass/blocs/firebase/firebase_event.dart';
 import 'package:g8te_pass/blocs/firebase/firebase_state.dart';
 import 'package:g8te_pass/common/fixtures.dart';
 import 'package:g8te_pass/common/size_config.dart';
+import 'package:g8te_pass/common/string_routes.dart';
 import 'package:g8te_pass/common/utils.dart';
 import 'package:g8te_pass/common/widgets/dropdown_widget.dart';
 import 'package:g8te_pass/common/widgets/gradient_background.dart';
@@ -492,8 +493,9 @@ class _RegistraterScreenState extends State<RegistraterScreen> {
         emailAddress: values['email'],
         password: values['password'],
       );
-      context.read<AuthBloc>().add(AuthAddUserCredentials(selectedApp: _selectedApp!, userCredentials: _user));
+      // context.read<AuthBloc>().add(AuthAddUserCredentials(selectedApp: _selectedApp!, userCredentials: _user));
+      context.read<AuthBloc>().add(AuthSavedDetails(user: _user));
+      Navigator.pushNamed(context, profileIdScreen);
     }
   }
-
 }

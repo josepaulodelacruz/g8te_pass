@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:g8te_pass/common/string_routes.dart';
 import 'package:g8te_pass/screens/export_screens.dart';
+import 'package:g8te_pass/screens/profile/profile_id_screen.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -16,6 +17,8 @@ class Router {
         return CupertinoPageRoute(builder: (_) => const LoginScreen());
       case registerScreen:
         return CupertinoPageRoute(builder: (_) => const RegistraterScreen());
+      case profileIdScreen:
+        return CupertinoPageRoute(builder: (_) => const ProfileIdScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
