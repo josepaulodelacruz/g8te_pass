@@ -17,6 +17,9 @@ import 'package:g8te_pass/services/user-database-service.dart';
 //Main initializer
 void setupApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -29,7 +32,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late final FirebaseApp mainApp;
-
 
   @override
   void initState() {
